@@ -231,6 +231,8 @@
     ofSetupScreen();
 	
     [ self.fullScreenView startAnimation ];
+    
+    [ self updateOpenGLContext ];
 }
 
 - (void) goWindow
@@ -251,6 +253,26 @@
 	[ [ self.openGLView openGLContext ] makeCurrentContext ];
 	
     [ self.openGLView startAnimation ];
+    
+    [ self updateOpenGLContext ];
+}
+
+/**
+ *  Because we are using multiple windows and therefore multiple opengl contexts,
+ *  some opengl settings do not carry over to the new window and have to set again.
+ *  For example, the blend mode needs to be set again for it to work when opengl context is changed.
+ *  There might be other things that need to be set again, and the place for it is in this method.
+ **/
+- (void) updateOpenGLContext
+{
+    ofStyle style = ofGetStyle();
+    ofEnableBlendMode( style.blendingMode );
+    if( style.smoothing )
+        ofEnableSmoothing();
+    else 
+        ofDisableSmoothing();
+    
+    // update anything else that needs updating with the opengl context change.
 }
 
 ////////////////////////////////////////////////

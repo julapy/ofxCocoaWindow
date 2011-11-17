@@ -37,6 +37,7 @@
 - (void) goFullScreenOnDisplay : (int)displayIndex;
 - (void) goFullScreen : (NSRect)displayRect;
 - (void) goWindow;
+- (void) updateOpenGLContext;
 
 - (float) getFrameRate;
 - (double) getLastFrameTime;
