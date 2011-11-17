@@ -1,2 +1,8 @@
-To get this addon working inside OpenFrameworks 007 you must first add,
+1) Supports fullscreen across multiple displays.
+2) Uses display link for vertical sync rendering.
+
+
+DEPENDENCIES
+
+To get this addon working inside OpenFrameworks 007 you must add,
 QuartzCore.framework to the systems frameworks folder.
