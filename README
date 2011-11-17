@@ -1,0 +1,2 @@
+To get this addon working inside OpenFrameworks 007 you must first add,
+QuartzCore.framework to the systems frameworks folder.
