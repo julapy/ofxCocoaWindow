@@ -28,6 +28,7 @@ public:
     ofPoint imagePos;
     
     bool bVSync;
+    bool bShowCursor;
 };
 
 #endif

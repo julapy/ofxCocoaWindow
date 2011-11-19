@@ -8,9 +8,12 @@ void testApp::setup()
     ofBackground( 0, 0, 0 );
     ofEnableAlphaBlending();
     ofSetVerticalSync( ( bVSync = true ) );
+    ofSetWindowPosition( 100, 100 );
     
     image.loadImage( "transparency.png" );
     imagePos.set( 0, 100 );
+    
+    bShowCursor = true;
 }
 
 //--------------------------------------------------------------
@@ -51,11 +54,20 @@ void testApp::draw()
     ofSetColor( 255 );
     image.draw( imagePos.x, imagePos.y );
 	
+    y = 10;
+    
 	ofSetColor( 0 );
-	ofDrawBitmapString( "press 'f' to toggle fullscreen ",  20, 30 );
-    ofDrawBitmapString( "press 'v' to toggle vertical sync, currently " + ( bVSync ? string("on") : string("off") ),  20, 50 );
-    ofDrawBitmapString( "fps = " + ofToString( ofGetFrameRate() ), 20, 70 );
-    ofDrawBitmapString( "frame no. = " + ofToString( ofGetFrameNum() ), 20, 90 );
+	ofDrawBitmapString( "press 'f' to toggle fullscreen ",  20, y+=20 );
+    ofDrawBitmapString( "press 'v' to toggle vertical sync, currently " + ( bVSync ? string("on") : string("off") ),  20, y+=20 );
+    ofDrawBitmapString( "press 'm' to show/hide cursor, currently " + ( bShowCursor ? string("on") : string("off") ),  20, y+=20 );
+    ofDrawBitmapString( "fps = " + ofToString( ofGetFrameRate() ), 20, y+=20 );
+    ofDrawBitmapString( "frame no. = " + ofToString( ofGetFrameNum() ), 20, y+=20 );
+    ofDrawBitmapString( "window position x = " + ofToString( ofGetWindowPositionX() ), 20, y+=20 );
+    ofDrawBitmapString( "window position y = " + ofToString( ofGetWindowPositionY() ), 20, y+=20 );
+    ofDrawBitmapString( "window width = " + ofToString( ofGetWidth() ), 20, y+=20 );
+    ofDrawBitmapString( "window height = " + ofToString( ofGetHeight() ), 20, y+=20 );
+    ofDrawBitmapString( "screen width = " + ofToString( ofGetScreenWidth() ), 20, y+=20 );
+    ofDrawBitmapString( "screen height = " + ofToString( ofGetScreenHeight() ), 20, y+=20 );
 }
 
 void testApp :: exit ()
@@ -71,6 +83,15 @@ void testApp::keyPressed(int key)
     
     if( key == 'v' )
         ofSetVerticalSync( ( bVSync = !bVSync ) );
+    
+    if( key == 'm' )
+    {
+        bShowCursor = !bShowCursor;
+        if( bShowCursor )
+            ofShowCursor();
+        else
+            ofHideCursor();
+    }
 }
 
 //--------------------------------------------------------------
