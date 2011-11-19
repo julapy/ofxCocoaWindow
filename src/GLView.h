@@ -18,7 +18,14 @@
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/CVDisplayLink.h>
 
-@interface GLView : NSView {
+@protocol GLViewDelegate <NSObject>
+@required
+- (void) glViewUpdate;
+@end
+
+@interface GLView : NSView 
+{
+    id <GLViewDelegate> delegate;
 	
 	NSOpenGLContext *openGLContext;
 	NSOpenGLPixelFormat *pixelFormat;
@@ -26,21 +33,10 @@
 	CVDisplayLinkRef displayLink;
 	BOOL isAnimating;
     
-	float	timeNow;
-    float   timeThen;
-    float   fps;
-    int		nFrameCount;
-	double	lastFrameTime;
-	float	frameRate;
-    bool	bEnableSetupScreen;
+    bool bEnableSetupScreen;
 }
 
-@property (assign)   float timeNow;
-@property (assign)   float timeThen;
-@property (assign)   float fps;
-@property (readonly) int nFrameCount;
-@property (readonly) double lastFrameTime;
-@property (readonly) float frameRate;
+@property(nonatomic, assign) id delegate;
 @property (assign)   bool bEnableSetupScreen;
 
 - (id) initWithFrame:(NSRect)frameRect;

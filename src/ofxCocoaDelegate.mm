@@ -19,6 +19,13 @@
 @synthesize windowMode;
 @synthesize windowModeInit;
 
+@synthesize timeNow;        //-- frame rate calc properties.
+@synthesize timeThen;
+@synthesize fps;
+@synthesize nFrameCount;
+@synthesize lastFrameTime;
+@synthesize frameRate;
+
 - (id) init 
 {
 	return [ self initWithWidth : 1024 
@@ -47,6 +54,7 @@
 		
 		self.openGLView = [ [ GLView alloc ] initWithFrame : contentSize 
                                               shareContext : nil ];
+        [ self.openGLView setDelegate: self ];
 
 		[ self.openGLWindow setContentView : self.openGLView ];
 	}
@@ -83,6 +91,12 @@
 	[ self.openGLWindow setAcceptsMouseMovedEvents : YES ];
 	[ self.openGLWindow display ];
     
+	timeNow     = 0;
+    timeThen    = 0;
+	fps         = 60;
+    frameRate   = 60;
+	nFrameCount = 0;
+    
     ofNotifySetup();
     
     if( self.windowModeInit == OF_WINDOW )
@@ -112,6 +126,7 @@
 {
     if( self.windowMode == OF_FULLSCREEN )
     {
+        [ self.fullScreenView setDelegate: nil ];
         [ self.fullScreenView release ];
         [ self.fullScreenWindow release ];
         
@@ -119,6 +134,7 @@
         self.fullScreenWindow = nil;
     }
     
+    [ self.openGLView setDelegate: nil ];
     [ self.openGLView release ];
     [ self.openGLWindow release ];
     
@@ -228,6 +244,8 @@
 	self.fullScreenView = [ [ GLView alloc ] initWithFrame : viewRect 
                                               shareContext : [ self.openGLView openGLContext ] ];
     
+    [ self.fullScreenView setDelegate: self ];
+    
 	[ self.fullScreenWindow setContentView : self.fullScreenView ];
 	[ self.fullScreenWindow makeKeyAndOrderFront : self ];   // Show the window
 	
@@ -246,6 +264,7 @@
     self.windowMode = OF_WINDOW;
     
     [ self.fullScreenView stopAnimation ];
+    [ self.fullScreenView setDelegate: nil ];
     
 	[ self.fullScreenWindow release ];
 	[ self.fullScreenView release ];
@@ -279,31 +298,41 @@
 }
 
 ////////////////////////////////////////////////
+//  GLViewDelegate callback.
+////////////////////////////////////////////////
+
+- (void) glViewUpdate
+{
+	timeNow = ofGetElapsedTimef();  //--- fps calculation:
+	double diff = timeNow - timeThen;
+	if( diff  > 0.00001 )
+    {
+		fps         =  1.0 / diff;
+		frameRate	*= 0.9f;
+		frameRate	+= 0.1f * fps;
+	}
+	lastFrameTime	= diff;
+	timeThen		= timeNow;
+    nFrameCount     += 1;
+}
+
+////////////////////////////////////////////////
 //  ABSTRACTING WINDOW / VIEW MEMBERS.
 ////////////////////////////////////////////////
 
 - (float) getFrameRate
 {
-    if( windowMode == OF_WINDOW )
-        return [ self.openGLView frameRate ];
-    else if( windowMode == OF_FULLSCREEN )
-        return [ self.fullScreenView frameRate ];
+    return [ self frameRate ];
 }
 
 - (double) getLastFrameTime
 {
-    if( windowMode == OF_WINDOW )
-        return [ self.openGLView lastFrameTime ];
-    else if( windowMode == OF_FULLSCREEN )
-        return [ self.fullScreenView lastFrameTime ];
+    return [ self lastFrameTime ];
 }
 
 - (int) getFrameNum
 {
-    if( windowMode == OF_WINDOW )
-        return [ self.openGLView nFrameCount ];
-    else if( windowMode == OF_FULLSCREEN )
-        return [ self.fullScreenView nFrameCount ];
+    return [ self nFrameCount ];
 }
 
 - (NSRect) getViewFrame

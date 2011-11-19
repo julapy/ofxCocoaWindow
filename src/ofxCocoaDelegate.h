@@ -12,7 +12,7 @@
 
 #import "GLView.h"
 
-@interface ofxCocoaDelegate : NSObject 
+@interface ofxCocoaDelegate : NSObject <GLViewDelegate>
 {
     NSWindow        *openGLWindow;
     GLView          *openGLView;
@@ -22,6 +22,13 @@
     
     ofWindowMode    windowMode;
     ofWindowMode    windowModeInit;
+    
+	float	timeNow;
+    float   timeThen;
+    float   fps;
+    int		nFrameCount;
+	double	lastFrameTime;
+	float	frameRate;
 }
 
 @property (retain) NSWindow *openGLWindow;
@@ -30,6 +37,13 @@
 @property (retain) GLView   *fullScreenView;
 @property (assign) ofWindowMode windowMode;
 @property (assign) ofWindowMode windowModeInit;
+
+@property (assign)   float timeNow;
+@property (assign)   float timeThen;
+@property (assign)   float fps;
+@property (readonly) int nFrameCount;
+@property (readonly) double lastFrameTime;
+@property (readonly) float frameRate;
 
 - (id)initWithWidth : (int)width 
              height : (int)height 

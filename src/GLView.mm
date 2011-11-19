@@ -19,12 +19,7 @@
 
 @implementation GLView
 
-@synthesize timeNow;
-@synthesize timeThen;
-@synthesize fps;
-@synthesize nFrameCount;
-@synthesize lastFrameTime;
-@synthesize frameRate;
+@synthesize delegate;
 @synthesize bEnableSetupScreen;
 
 - (NSOpenGLContext*) openGLContext
@@ -43,18 +38,7 @@
 	// It's important to create one or you will leak objects
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
-	// ----------------------------------------- fps calculation:
-	timeNow = ofGetElapsedTimef();
-	double diff = timeNow - timeThen;
-	if( diff  > 0.00001 )
-    {
-		fps         =  1.0 / diff;
-		frameRate	*= 0.9f;
-		frameRate	+= 0.1f * fps;
-	}
-	lastFrameTime	= diff;
-	timeThen		= timeNow;
-	// -----------------------------------------
+    [ delegate glViewUpdate ];
     
 	[self drawView];
 	
@@ -85,12 +69,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (id) initWithFrame:(NSRect)frameRect shareContext:(NSOpenGLContext*)context
 {
-	timeNow     = 0;
-    timeThen    = 0;
-	fps         = 60;
-    frameRate   = 60;
-	nFrameCount = 0;
-
     bEnableSetupScreen = true;
     
     NSOpenGLPixelFormatAttribute attribs[] =
