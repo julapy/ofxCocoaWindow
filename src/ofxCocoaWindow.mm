@@ -142,15 +142,10 @@ ofOrientation ofxCocoaWindow :: getOrientation()
 //------------------------------------------------------------
 void ofxCocoaWindow :: setWindowPosition( int x, int y ) 
 {
-	NSRect viewFrame    = [ [ NSApp delegate ] getViewFrame ];
-	NSRect windowFrame  = [ [ NSApp delegate ] getWindowFrame ];
-	NSRect screenRect   = [ [ NSApp delegate ] getScreenFrame ];
+	NSRect viewFrame  = [ [ NSApp delegate ] getViewFrame ];
+	NSRect screenRect = [ [ NSApp delegate ] getScreenFrame ];
 	
-	// TODO: this isn't quite right yet. A few pixels off I think. ~2?
-	// GLUT draws from top left
-	// Apple Cocoa draws from bottom left
-	
-	NSPoint position = NSMakePoint( x, screenRect.size.height - y );
+	NSPoint position = NSMakePoint( x, screenRect.size.height - viewFrame.size.height - y );
     [ [ NSApp delegate ] setWindowPosition : position ];
 }
 

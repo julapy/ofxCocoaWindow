@@ -39,8 +39,8 @@
 {
 	if( self = [super init] )
     {
-        self.windowMode     = OF_WINDOW;        // by default set to window.
-        self.windowModeInit = mode;
+        self.windowMode         = OF_WINDOW;        // by default set to window.
+        self.windowModeInit     = mode;
         
 		NSRect contentSize = NSMakeRect( 0.0f, 0.0f, width, height );
 
@@ -361,17 +361,11 @@
 
 - (void) setWindowPosition : (NSPoint)position
 {
-    if( windowMode == OF_FULLSCREEN )
-        return;
-    
-    [ self.openGLWindow cascadeTopLeftFromPoint: position ];
+    [ self.openGLWindow setFrameOrigin: position ];
 }
 
 - (void) setWindowShape : (NSRect)shape
 {
-    if( windowMode == OF_FULLSCREEN )
-        return;
-
     [ self.openGLWindow setFrame : shape display : YES ];
 }
 
