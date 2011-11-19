@@ -55,6 +55,7 @@ void testApp::draw()
 	ofDrawBitmapString( "press 'f' to toggle fullscreen ",  20, 30 );
     ofDrawBitmapString( "press 'v' to toggle vertical sync, currently " + ( bVSync ? string("on") : string("off") ),  20, 50 );
     ofDrawBitmapString( "fps = " + ofToString( ofGetFrameRate() ), 20, 70 );
+    ofDrawBitmapString( "frame no. = " + ofToString( ofGetFrameNum() ), 20, 90 );
 }
 
 void testApp :: exit ()
