@@ -21,6 +21,7 @@
 	GLView          *fullScreenView;
     
     ofWindowMode    windowMode;
+    ofWindowMode    windowModeInit;
 }
 
 @property (retain) NSWindow *openGLWindow;
@@ -28,6 +29,7 @@
 @property (retain) NSWindow *fullScreenWindow;
 @property (retain) GLView   *fullScreenView;
 @property (assign) ofWindowMode windowMode;
+@property (assign) ofWindowMode windowModeInit;
 
 - (id)initWithWidth : (int)width 
              height : (int)height 

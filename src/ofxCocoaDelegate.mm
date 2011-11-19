@@ -17,6 +17,7 @@
 @synthesize fullScreenWindow;
 @synthesize fullScreenView;
 @synthesize windowMode;
+@synthesize windowModeInit;
 
 - (id) init 
 {
@@ -31,7 +32,8 @@
 {
 	if( self = [super init] )
     {
-        self.windowMode = mode;
+        self.windowMode     = OF_WINDOW;        // by default set to window.
+        self.windowModeInit = mode;
         
 		NSRect contentSize = NSMakeRect( 0.0f, 0.0f, width, height );
 
@@ -83,13 +85,14 @@
     
     ofNotifySetup();
     
-    if( self.windowMode == OF_WINDOW )
+    if( self.windowModeInit == OF_WINDOW )
     {
         [ self.openGLView startAnimation ];
     }
-    else if( self.windowMode == OF_FULLSCREEN )
+    else if( self.windowModeInit == OF_FULLSCREEN )
     {
-        [ self.fullScreenView startAnimation ];
+        [ self.openGLView drawView ];       // must first draw content at least once, otherwise textures are not shared between the two opengl contexts.
+        [ self goFullScreenOnAllDisplays ];
     }
 }
 
@@ -259,7 +262,7 @@
 
 /**
  *  Because we are using multiple windows and therefore multiple opengl contexts,
- *  some opengl settings do not carry over to the new window and have to set again.
+ *  some opengl settings do not carry over to the new window and have to be set again.
  *  For example, the blend mode needs to be set again for it to work when opengl context is changed.
  *  There might be other things that need to be set again, and the place for it is in this method.
  **/
