@@ -366,7 +366,8 @@
 
 - (void) setWindowShape : (NSRect)shape
 {
-    [ self.openGLWindow setFrame : shape display : YES ];
+    [ self.openGLWindow setFrameOrigin : shape.origin ];
+    [ self.openGLWindow setContentSize : shape.size ];
 }
 
 - (void) enableSetupScreen

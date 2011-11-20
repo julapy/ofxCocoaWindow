@@ -152,14 +152,16 @@ void ofxCocoaWindow :: setWindowPosition( int x, int y )
 //------------------------------------------------------------
 void ofxCocoaWindow :: setWindowShape( int w, int h )
 {
-	// TODO: test this part, not sure if it works
-	
-	NSRect windowFrame  = [ [ NSApp delegate ] getWindowFrame ];
+    NSRect windowFrame  = [ [ NSApp delegate ] getWindowFrame ];
 	NSRect viewFrame    = [ [ NSApp delegate ] getViewFrame ];
+	NSRect screenRect   = [ [ NSApp delegate ] getScreenFrame ];
+    
+    int x, y, g;
+    x = windowFrame.origin.x;
+    y = screenRect.size.height - viewFrame.size.height - windowFrame.origin.y;
 	
-	windowFrame.origin.y -= h - viewFrame.size.height;
-	windowFrame.size = NSMakeSize( w + windowFrame.size.width  - viewFrame.size.width, 
-								   h + windowFrame.size.height - viewFrame.size.height );
+    windowFrame.origin  = NSMakePoint( x, screenRect.size.height - h - y );
+	windowFrame.size    = NSMakeSize( w, h );
 	
 	[ [ NSApp delegate ] setWindowShape : windowFrame ];
 }
