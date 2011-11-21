@@ -12,12 +12,12 @@ int main( )
     if( bUseCocoaWindow )
     {
         ofxCocoaWindow cocoaWindow;
-        ofSetupOpenGL( &cocoaWindow, 1024, 768, OF_WINDOW );
+        ofSetupOpenGL( &cocoaWindow, 800, 600, OF_WINDOW );
     }
     else
     {
         ofAppGlutWindow window;
-        ofSetupOpenGL( &window, 1024, 768, OF_WINDOW );
+        ofSetupOpenGL( &window, 800, 600, OF_WINDOW );
     }
 	ofRunApp( new testApp() );
 }

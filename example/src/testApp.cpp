@@ -9,11 +9,13 @@ void testApp::setup()
     ofEnableAlphaBlending();
     ofSetVerticalSync( ( bVSync = true ) );
     ofSetWindowPosition( 100, 100 );
+//    ofSetWindowShape( 1024, 768 );
     
     image.loadImage( "transparency.png" );
     imagePos.set( 0, 100 );
     
     bShowCursor = true;
+    bWindowShape = false;
 }
 
 //--------------------------------------------------------------
@@ -57,9 +59,14 @@ void testApp::draw()
     y = 10;
     
 	ofSetColor( 0 );
-	ofDrawBitmapString( "press 'f' to toggle fullscreen ",  20, y+=20 );
-    ofDrawBitmapString( "press 'v' to toggle vertical sync, currently " + ( bVSync ? string("on") : string("off") ),  20, y+=20 );
-    ofDrawBitmapString( "press 'm' to show/hide cursor, currently " + ( bShowCursor ? string("on") : string("off") ),  20, y+=20 );
+	ofDrawBitmapString( "press 'f' to toggle fullscreen ", 20, y+=20 );
+    ofDrawBitmapString( "press 'v' to toggle vertical sync, currently " + ( bVSync ? string("on") : string("off") ), 20, y+=20 );
+    ofDrawBitmapString( "press 'm' to show/hide cursor, currently " + ( bShowCursor ? string("on") : string("off") ), 20, y+=20 );
+    ofDrawBitmapString( "press 's' to reshape the window", 20, y+=20 );
+    ofDrawBitmapString( "press the arrow keys to nudge the window. note: works only in OF_WINDOW mode", 20, y+=20 );
+    
+    y+=20;
+    
     ofDrawBitmapString( "fps = " + ofToString( ofGetFrameRate() ), 20, y+=20 );
     ofDrawBitmapString( "frame no. = " + ofToString( ofGetFrameNum() ), 20, y+=20 );
     ofDrawBitmapString( "window position x = " + ofToString( ofGetWindowPositionX() ), 20, y+=20 );
@@ -91,6 +98,34 @@ void testApp::keyPressed(int key)
             ofShowCursor();
         else
             ofHideCursor();
+    }
+    
+    if( key == 's' )
+    {
+        bWindowShape = !bWindowShape;
+        if( bWindowShape )
+            ofSetWindowShape( 1024, 768 );
+        else
+            ofSetWindowShape( 800, 600 );
+    }
+    
+    int windowMoveInc = 20;
+    
+    if( key == OF_KEY_LEFT )
+    {
+        ofSetWindowPosition( MAX( ofGetWindowPositionX() - windowMoveInc, 0 ), ofGetWindowPositionY() );
+    }
+    else if( key == OF_KEY_RIGHT )
+    {
+        ofSetWindowPosition( MIN( ofGetWindowPositionX() + windowMoveInc, ofGetScreenWidth() - ofGetWidth() ), ofGetWindowPositionY() );
+    }
+    else if( key == OF_KEY_UP )
+    {
+        ofSetWindowPosition( ofGetWindowPositionX(), MAX( ofGetWindowPositionY() - windowMoveInc, 0 ) );
+    }
+    else if( key == OF_KEY_DOWN )
+    {
+        ofSetWindowPosition( ofGetWindowPositionX(), MIN( ofGetWindowPositionY() + windowMoveInc, ofGetScreenHeight() - ofGetHeight() ) );
     }
 }
 

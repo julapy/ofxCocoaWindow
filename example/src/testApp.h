@@ -29,6 +29,7 @@ public:
     
     bool bVSync;
     bool bShowCursor;
+    bool bWindowShape;
 };
 
 #endif
