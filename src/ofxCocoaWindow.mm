@@ -142,6 +142,9 @@ ofOrientation ofxCocoaWindow :: getOrientation()
 //------------------------------------------------------------
 void ofxCocoaWindow :: setWindowPosition( int x, int y ) 
 {
+    if( [ [ NSApp delegate ] windowMode ] == OF_FULLSCREEN )
+        return; // only do this in OF_WINDOW mode.
+    
 	NSRect viewFrame  = [ [ NSApp delegate ] getViewFrame ];
 	NSRect screenRect = [ [ NSApp delegate ] getScreenFrame ];
 	
@@ -152,6 +155,9 @@ void ofxCocoaWindow :: setWindowPosition( int x, int y )
 //------------------------------------------------------------
 void ofxCocoaWindow :: setWindowShape( int w, int h )
 {
+    if( [ [ NSApp delegate ] windowMode ] == OF_FULLSCREEN )
+        return; // only do this in OF_WINDOW mode.
+    
     NSRect windowFrame  = [ [ NSApp delegate ] getWindowFrame ];
 	NSRect viewFrame    = [ [ NSApp delegate ] getViewFrame ];
 	NSRect screenRect   = [ [ NSApp delegate ] getScreenFrame ];
@@ -160,10 +166,11 @@ void ofxCocoaWindow :: setWindowShape( int w, int h )
     x = windowFrame.origin.x;
     y = screenRect.size.height - viewFrame.size.height - windowFrame.origin.y;
 	
-    windowFrame.origin  = NSMakePoint( x, screenRect.size.height - h - y );
-	windowFrame.size    = NSMakeSize( w, h );
+    NSRect resizedWindowFrame = NSZeroRect;
+    resizedWindowFrame.origin = NSMakePoint( x, screenRect.size.height - h - y );
+	resizedWindowFrame.size   = NSMakeSize( w, h );
 	
-	[ [ NSApp delegate ] setWindowShape : windowFrame ];
+	[ [ NSApp delegate ] setWindowShape : resizedWindowFrame ];
 }
 
 //------------------------------------------------------------
