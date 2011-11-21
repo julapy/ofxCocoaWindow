@@ -137,8 +137,26 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (void) drawRect:(NSRect)dirtyRect
 {
-    // do not draw anything in here.
-    // draw everytime the display link is called back.
+	if( CVDisplayLinkIsRunning(displayLink) )   // display link running, do not draw.
+		return;
+    
+	// This method will be called on both the main thread (through -drawRect:) and a secondary thread (through the display link rendering loop)
+	// Also, when resizing the view, -reshape is called on the main thread, but we may be drawing on a secondary thread
+	// Add a mutex around to avoid the threads accessing the context simultaneously
+	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+	
+	// Make sure we draw to the right context
+	[[self openGLContext] makeCurrentContext];
+	
+    ofSetupScreen();
+        
+    float * bgPtr = ofBgColorPtr();
+    glClearColor(bgPtr[0],bgPtr[1],bgPtr[2], bgPtr[3]);
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+	[[self openGLContext] flushBuffer]; 
+	
+	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
 }
 
 - (void) drawView
