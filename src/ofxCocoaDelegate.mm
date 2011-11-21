@@ -99,6 +99,8 @@
     
     ofNotifySetup();
     
+    [ self.openGLView drawView ];
+    
     if( self.windowModeInit == OF_WINDOW )
     {
         [ self.openGLView startAnimation ];
