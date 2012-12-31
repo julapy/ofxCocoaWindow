@@ -55,6 +55,8 @@ public:
 
 	void		enableSetupScreen();
 	void		disableSetupScreen();
+    
+    void        test();
 	
 protected:
 	ofOrientation       orientation;

@@ -34,11 +34,13 @@
 	BOOL isAnimating;
     
     bool bEnableSetupScreen;
+    
 }
 
 @property(nonatomic, assign) id delegate;
 @property (assign)   bool bEnableSetupScreen;
 
+- (void) timerFired:(id)sender;
 - (id) initWithFrame:(NSRect)frameRect;
 - (id) initWithFrame:(NSRect)frameRect shareContext:(NSOpenGLContext*)context;
 

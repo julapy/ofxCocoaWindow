@@ -142,8 +142,8 @@ ofOrientation ofxCocoaWindow :: getOrientation()
 //------------------------------------------------------------
 void ofxCocoaWindow :: setWindowPosition( int x, int y ) 
 {
-    if( [ [ NSApp delegate ] windowMode ] == OF_FULLSCREEN )
-        return; // only do this in OF_WINDOW mode.
+//    if( [ [ NSApp delegate ] windowMode ] == OF_FULLSCREEN )
+//        return; // only do this in OF_WINDOW mode.
     
 	NSRect viewFrame  = [ [ NSApp delegate ] getViewFrame ];
 	NSRect screenRect = [ [ NSApp delegate ] getScreenFrame ];
@@ -155,8 +155,8 @@ void ofxCocoaWindow :: setWindowPosition( int x, int y )
 //------------------------------------------------------------
 void ofxCocoaWindow :: setWindowShape( int w, int h )
 {
-    if( [ [ NSApp delegate ] windowMode ] == OF_FULLSCREEN )
-        return; // only do this in OF_WINDOW mode.
+//    if( [ [ NSApp delegate ] windowMode ] == OF_FULLSCREEN )
+//        return; // only do this in OF_WINDOW mode.
     
     NSRect windowFrame  = [ [ NSApp delegate ] getWindowFrame ];
 	NSRect viewFrame    = [ [ NSApp delegate ] getViewFrame ];
@@ -183,6 +183,13 @@ void ofxCocoaWindow :: hideCursor()
 void ofxCocoaWindow :: showCursor() 
 {
 	[ NSCursor unhide ];
+    cout <<  [[ NSApp delegate ] getFrameRate] << endl;
+}
+
+//------------------------------------------------------------
+void ofxCocoaWindow :: test()
+{
+	cout <<  "bla"<< endl;
 }
 
 //------------------------------------------------------------
@@ -206,6 +213,7 @@ void ofxCocoaWindow :: toggleFullscreen()
 	if( [ [ NSApp delegate ] windowMode ] == OF_WINDOW )
     {
 		[ [ NSApp delegate ] goFullScreenOnAllDisplays ];
+       // [ [ NSApp delegate ] goFullScreen:NSMakeRect(1, 900-300, 400, 300) ];
     }
     else if( [ [ NSApp delegate ] windowMode ] == OF_FULLSCREEN )
     {
