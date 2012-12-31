@@ -17,6 +17,9 @@
 #import <OpenGL/glext.h>
 #import <OpenGL/glu.h>
 
+
+
+
 @implementation GLView
 
 @synthesize delegate;
@@ -36,13 +39,16 @@
 {
 	// There is no autorelease pool when this method is called because it will be called from a background thread
 	// It's important to create one or you will leak objects
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-    [ delegate glViewUpdate ];
+//	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+//	
+//    [ delegate glViewUpdate ];
+//    
+//	[self drawView];
+//	
+//	[pool release];
     
-	[self drawView];
-	
-	[pool release];
+    [self performSelectorOnMainThread:@selector(timerFired:) withObject:nil waitUntilDone:NO ];
+    
     return kCVReturnSuccess;
 }
 
@@ -67,6 +73,41 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink, cglContext, cglPixelFormat);
 }
 
+- (void) setupNSTimer
+{
+    
+	
+    NSTimer* renderTimer = [NSTimer timerWithTimeInterval:0.001
+                             target:self
+                                         selector:@selector(timerFired:)
+                                         userInfo:nil
+                                          repeats:YES];
+                   
+                   [[NSRunLoop currentRunLoop] addTimer:renderTimer
+                                                forMode:NSDefaultRunLoopMode];
+                   [[NSRunLoop currentRunLoop] addTimer:renderTimer
+                                                forMode:NSEventTrackingRunLoopMode]; //Ensure timer fires during resize
+}
+                   
+                   // Timer callback method
+- (void)timerFired:(id)sender
+    {
+        // It is good practice in a Cocoa application to allow the system to send the -drawRect:
+        // message when it needs to draw, and not to invoke it directly from the timer.
+        // All we do here is tell the display it needs a refresh
+        
+        
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        
+        [ delegate glViewUpdate ];
+        
+        [self setNeedsDisplay:YES];
+        
+        [pool release];
+        //[self drawView];
+    }
+                   
+
 - (id) initWithFrame:(NSRect)frameRect shareContext:(NSOpenGLContext*)context
 {
     bEnableSetupScreen = true;
@@ -77,9 +118,23 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 		kCGLPFANoRecovery,
 		kCGLPFADoubleBuffer,
 		kCGLPFAColorSize, 24,
-		kCGLPFADepthSize, 16,
+		kCGLPFADepthSize, 0,
 		0
     };
+    
+//    NSOpenGLPixelFormatAttribute attribs[] =
+//    {
+//        kCGLPFAAccelerated,
+//        kCGLPFANoRecovery,
+//        kCGLPFADoubleBuffer,
+//        kCGLPFAAlphaSize, 8,
+//        kCGLPFAColorSize, 24,
+//        kCGLPFADepthSize, 16,
+//        kCGLPFAMultisample,
+//        kCGLPFASampleBuffers, 1,
+//        kCGLPFASamples, 4,
+//        0
+//    };
 	
     pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attribs];
 	
@@ -96,7 +151,12 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 		GLint swapInt = 1;
 		[[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; 
 		
+        
+        
 		[self setupDisplayLink];
+        
+        //[self setupNSTimer];
+        
 		
 		// Look for changes in view size
 		// Note, -reshape will not be called automatically on size changes because NSView does not export it to override 
@@ -137,26 +197,35 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (void) drawRect:(NSRect)dirtyRect
 {
-	if( CVDisplayLinkIsRunning(displayLink) )   // display link running, do not draw.
-		return;
+	//if( CVDisplayLinkIsRunning(displayLink) ) return;
     
 	// This method will be called on both the main thread (through -drawRect:) and a secondary thread (through the display link rendering loop)
 	// Also, when resizing the view, -reshape is called on the main thread, but we may be drawing on a secondary thread
 	// Add a mutex around to avoid the threads accessing the context simultaneously
-	CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+	//CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
 	
 	// Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
 	
-    ofSetupScreen();
-        
-    float * bgPtr = ofBgColorPtr();
-    glClearColor(bgPtr[0],bgPtr[1],bgPtr[2], bgPtr[3]);
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    if( bEnableSetupScreen )
+        ofSetupScreen();
     
-	[[self openGLContext] flushBuffer]; 
-	
-	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+	if( ofbClearBg() )
+    {
+		float * bgPtr = ofBgColorPtr();
+		glClearColor(bgPtr[0],bgPtr[1],bgPtr[2], bgPtr[3]);
+		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+    
+    
+    ofNotifyUpdate();
+    ofNotifyDraw();
+    
+    
+	//[[self openGLContext] flushBuffer];
+	CGLFlushDrawable((CGLContextObj)[[self openGLContext] CGLContextObj]);
+	//CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+    
 }
 
 - (void) drawView
@@ -179,12 +248,16 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
     
+    
     ofNotifyUpdate();
     ofNotifyDraw();
+    
     
 	[[self openGLContext] flushBuffer]; 
 	
 	CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
+    
+    NSLog(@";");
 }
  
 - (BOOL) acceptsFirstResponder

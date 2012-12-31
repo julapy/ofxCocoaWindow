@@ -10,6 +10,12 @@
 
 #import "ofxCocoaDelegate.h"
 
+static bool			bFrameRateSet;
+static int 			millisForFrame;
+static int 			prevMillis;
+static int 			diffMillis;
+
+
 @implementation ofxCocoaDelegate
 
 @synthesize openGLWindow;
@@ -49,6 +55,11 @@
                                                            styleMask : NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask
                                                              backing : NSBackingStoreBuffered 
                                                                defer : NO ];
+        
+//        self.openGLWindow = [ [ NSWindow alloc ] initWithContentRect : contentSize
+//                                                           styleMask : NSBorderlessWindowMask
+//                                                             backing : NSBackingStoreBuffered
+//                                                               defer : NO ];
 		
 		[ self.openGLWindow setLevel : NSNormalWindowLevel ];
 		
@@ -303,6 +314,31 @@
 
 - (void) glViewUpdate
 {
+    
+    int targetRate          = 60.0;
+    bFrameRateSet 			= false;
+	float durationOfFrame 	= 1.0f / (float)targetRate;
+	millisForFrame 			= (int)(1000.0f * durationOfFrame);
+
+    
+    
+    if (nFrameCount != 0 && bFrameRateSet){
+		diffMillis = ofGetElapsedTimeMillis() - prevMillis;
+		if (diffMillis > millisForFrame){
+			; // we do nothing, we are already slower than target frame
+		} else {
+			int waitMillis = millisForFrame - diffMillis;
+#ifdef TARGET_WIN32
+            Sleep(waitMillis);         //windows sleep in milliseconds
+#else
+            usleep(waitMillis * 1000);   //mac sleep in microseconds - cooler :)
+#endif
+		}
+	}
+	prevMillis = ofGetElapsedTimeMillis(); // you have to measure here
+    
+    
+    
 	timeNow = ofGetElapsedTimef();  //--- fps calculation:
 	double diff = timeNow - timeThen;
 	if( diff  > 0.00001 )
@@ -314,6 +350,7 @@
 	lastFrameTime	= diff;
 	timeThen		= timeNow;
     nFrameCount     += 1;
+    
 }
 
 ////////////////////////////////////////////////
@@ -361,13 +398,22 @@
 
 - (void) setWindowPosition : (NSPoint)position
 {
+    if( windowMode == OF_WINDOW )
     [ self.openGLWindow setFrameOrigin: position ];
+    else
+        [ self.fullScreenWindow setFrameOrigin: position ];
 }
 
 - (void) setWindowShape : (NSRect)shape
 {
+    if( windowMode == OF_WINDOW ) {
     [ self.openGLWindow setContentSize : shape.size ];
     [ self.openGLWindow setFrameOrigin : shape.origin ];
+    }
+    else {
+        [ self.fullScreenWindow setContentSize : shape.size ];
+        [ self.fullScreenWindow setFrameOrigin : shape.origin ];
+    }
 }
 
 - (void) enableSetupScreen
