@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>91816189-64CB-44B1-BAC8-735F5395DD3D</string>
+	<key>IDESourceControlProjectName</key>
+	<string>emptyExample</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>ADEE0FB8-5C68-4760-8786-17C6031584F0</key>
+		<string>https://github.com/julapy/openFrameworks.git</string>
+		<key>DE78E516-A0A1-4FC0-A0A1-52C3F3D35345</key>
+		<string>https://github.com/julapy/ofxCocoaWindow.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>addons/ofxCocoaWindow/cocoaExample/emptyExample.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>ADEE0FB8-5C68-4760-8786-17C6031584F0</key>
+		<string>../../../../..</string>
+		<key>DE78E516-A0A1-4FC0-A0A1-52C3F3D35345</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/julapy/ofxCocoaWindow.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>ADEE0FB8-5C68-4760-8786-17C6031584F0</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>DE78E516-A0A1-4FC0-A0A1-52C3F3D35345</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ofxCocoaWindow</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>ADEE0FB8-5C68-4760-8786-17C6031584F0</string>
+			<key>IDESourceControlWCCName</key>
+			<string>openFrameworks</string>
+		</dict>
+	</array>
+</dict>
+</plist>

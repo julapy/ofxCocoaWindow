@@ -1,9 +1,9 @@
 
 
-#include "testApp.h"
+#include "ofApp.h"
 
 //--------------------------------------------------------------
-void testApp::setup() 
+void ofApp::setup()
 {
     ofBackground( 0, 0, 0 );
     ofEnableAlphaBlending();
@@ -19,7 +19,7 @@ void testApp::setup()
 }
 
 //--------------------------------------------------------------
-void testApp::update()
+void ofApp::update()
 {
 	imagePos.x += 1;
     if( imagePos.x > ofGetWidth() - image.width )
@@ -27,7 +27,7 @@ void testApp::update()
 }
 
 //--------------------------------------------------------------
-void testApp::draw()
+void ofApp::draw()
 {
     vector<ofColor> colors;
     colors.push_back( ofColor :: red );
@@ -77,13 +77,13 @@ void testApp::draw()
     ofDrawBitmapString( "screen height = " + ofToString( ofGetScreenHeight() ), 20, y+=20 );
 }
 
-void testApp :: exit ()
+void ofApp :: exit ()
 {
     //
 }
 
 //--------------------------------------------------------------
-void testApp::keyPressed(int key)
+void ofApp::keyPressed(int key)
 {
     if( key == 'f' )
         ofToggleFullscreen();
@@ -130,36 +130,36 @@ void testApp::keyPressed(int key)
 }
 
 //--------------------------------------------------------------
-void testApp::keyReleased(int key){ 
+void ofApp::keyReleased(int key){
 	
 }
 
 //--------------------------------------------------------------
-void testApp::mouseMoved(int x, int y ){
+void ofApp::mouseMoved(int x, int y ){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button){
+void ofApp::mouseDragged(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mousePressed(int x, int y, int button){
+void ofApp::mousePressed(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button){
+void ofApp::mouseReleased(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::windowResized(int w, int h){
+void ofApp::windowResized(int w, int h){
 
 }
 
 //--------------------------------------------------------------
-void testApp::gotMessage(ofMessage msg){
+void ofApp::gotMessage(ofMessage msg){
 
 }
