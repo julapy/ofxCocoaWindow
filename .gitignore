@@ -1,0 +1,17 @@
+build/
+DerivedData/
+
+.DS_Store
+
+*.pbxuser
+#*.perspective
+#*.perspectivev3
+*.xccheckout
+
+*.mode1v3
+*.mode2v3
+
+*/bin/*.app
+*/bin/*.plugin
+
+xcuserdata/
